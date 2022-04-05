@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { compliteTodo, removeTodo, toggleTodo } from '../store/todoSlice'
 
-const TodoItem = ({id,status,text}) => {
+const TodoItem = ({id,completed,title}) => {
 
   const dispatch = useDispatch()
 
@@ -16,7 +16,7 @@ const TodoItem = ({id,status,text}) => {
 
   return (
     <div className='item'>
-      <div onClick={checkTask} className={`text ${status ? 'yes' : 'no'}`}>{text}</div>
+      <div onClick={checkTask} className={`text ${completed ? 'yes' : 'no'}`}>{title}</div>
       <div onClick={delTask} className='delete'>X</div>
     </div>
   )

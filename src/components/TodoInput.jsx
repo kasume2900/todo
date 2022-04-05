@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addtodo } from '../store/todoSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addtodo, fetchTodos } from '../store/todoSlice'
 import './todo.scss'
 import TodoList from './TodoList'
 
 const TodoInput = () => {
 
   const [value,setValue] = useState('')
+
+  const {status,error} = useSelector(state => state.todos)
+
   const dispatch = useDispatch()
 
   const changeInput = (e) => {
@@ -17,8 +20,8 @@ const TodoInput = () => {
     if (value) {
       dispatch(addtodo({
         id: Date.now(),
-        status : false,
-        text : value
+        complited : false,
+        title : value
       }))
     }
     
@@ -35,7 +38,8 @@ const TodoInput = () => {
 
   useEffect(() => {
     inputRef.current.focus()
-  },[])
+    dispatch(fetchTodos())
+  },[dispatch])
 
 
   return (
@@ -45,6 +49,8 @@ const TodoInput = () => {
         <input onKeyDown={handleKeyDown} ref={inputRef} onChange={changeInput} value={value} type="text" />
         <button onClick={addTask}>add task</button>
       </div>
+      {status === 'loading' && <h2>Loading ...</h2>}
+      {error && <h2>{error}</h2>}
       <TodoList />
     </div>
   )
