@@ -23,6 +23,26 @@ export const fetchTodos = createAsyncThunk(
   }
 )
 
+export const deleteTodos = createAsyncThunk(
+  'todos/deleteTodos',
+  async function(id,{rejectWithValue,dispatch}) {
+    try {
+      const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`,{
+        method: 'DELETE'
+      })
+      
+      if(!res.ok) {
+        throw new Error('Не могу удалить Error Server')
+      }
+
+      dispatch(removeTodo(id))
+
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+  }
+)
+
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
