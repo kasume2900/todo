@@ -72,6 +72,38 @@ export const toogleStatus = createAsyncThunk(
   }
 )
 
+export const addNewTodo = createAsyncThunk(
+  'todos/addNewTodo',
+  async function(text,{rejectWithValue,dispatch}) {
+    try {
+
+      const todo = {
+        title : text,
+        userId : 1,
+        completed : false
+      }
+
+      const res = await fetch('https://jsonplaceholder.typicode.com/todos',{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify(todo)
+      })
+
+      if(!res.ok) {
+        throw new Error('Не могу создать задачу Server Error')
+      }
+      const data = await res.json()
+
+      dispatch(addtodo(data))
+
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
 
 const setError = (state,action) => {
   state.status = 'rejected'
@@ -120,6 +152,7 @@ export const todoSlice = createSlice({
     [fetchTodos.rejected] : setError,
     [deleteTodos.rejected] : setError,
     [toogleStatus.rejected] : setError,
+    [addNewTodo.rejected] : setError,
   }
 })
 

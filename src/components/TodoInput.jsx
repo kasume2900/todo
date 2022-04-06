@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addtodo, fetchTodos } from '../store/todoSlice'
+import { addNewTodo, fetchTodos } from '../store/todoSlice'
 import './todo.scss'
 import TodoList from './TodoList'
 
@@ -18,11 +18,7 @@ const TodoInput = () => {
 
   const addTask = () => {
     if (value) {
-      dispatch(addtodo({
-        id: Date.now(),
-        complited : false,
-        title : value
-      }))
+      dispatch(addNewTodo(value))
     }
     
     setValue('')
