@@ -43,6 +43,41 @@ export const deleteTodos = createAsyncThunk(
   }
 )
 
+export const toogleStatus = createAsyncThunk(
+  'todos/toogleStatus',
+  async function(id,{rejectWithValue,dispatch,getState}) {
+    const todo = getState().todos.todos.find(el => el.id === id)
+    try {
+      const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`,{
+        method : 'PATCH',
+        headers : {
+          'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify({
+          completed : !todo.completed
+        })
+      })
+
+      if(!res.ok) {
+        throw new Error('Не могу изменить статус Server Error')
+      }
+      
+      dispatch(toggleTodo(id))
+      dispatch(compliteTodo())
+      
+
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+
+const setError = (state,action) => {
+  state.status = 'rejected'
+  state.error = action.payload
+}
+
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
@@ -82,10 +117,9 @@ export const todoSlice = createSlice({
       state.status = 'resolved'
       state.todos = action.payload
     },
-    [fetchTodos.rejected] : (state,action) => {
-      state.status = 'rejected'
-      state.error = action.payload
-    },
+    [fetchTodos.rejected] : setError,
+    [deleteTodos.rejected] : setError,
+    [toogleStatus.rejected] : setError,
   }
 })
 

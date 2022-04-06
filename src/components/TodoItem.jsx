@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { compliteTodo, deleteTodos, toggleTodo } from '../store/todoSlice'
+import { compliteTodo, deleteTodos, toogleStatus } from '../store/todoSlice'
 
 const TodoItem = ({id,completed,title}) => {
 
@@ -10,8 +10,8 @@ const TodoItem = ({id,completed,title}) => {
     dispatch(deleteTodos(id))
   }
   const checkTask = () => {
-    dispatch(toggleTodo(id))
-    dispatch(compliteTodo())
+    dispatch(toogleStatus(id))
+    //dispatch(compliteTodo())
   }
 
   return (
